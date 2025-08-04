@@ -14,16 +14,16 @@ A sophisticated AI agent system built with LangGraph that combines document retr
 
 ## 📋 Prerequisites
 
-- Python 3.8+
+- Python 3.11+
 - OpenAI API key
-- Weather API key (OpenWeatherMap or similar)
+- Weather API key (OpenWeatherMap)
 - Git
 
 ## 🛠️ Installation
 
 1. **Clone the repository**
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/avinash00134/ai-agent-pipeline
 cd ai-agent-pipeline
 ```
 
