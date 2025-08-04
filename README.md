@@ -53,8 +53,8 @@ LANGCHAIN_PROJECT=ai-agent-pipeline
 LANGCHAIN_TRACING_V2=true
 
 # Model Configuration (optional - defaults provided)
-LLM_MODEL=gpt-4
-EMBEDDING_MODEL=text-embedding-ada-002
+LLM_MODEL=gpt-3.5-turbo
+EMBEDDING_MODEL=all-MiniLM-L6-v2
 
 # Vector Database (optional - defaults provided)
 CHROMA_PERSIST_DIRECTORY=./chroma_db
