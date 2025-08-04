@@ -1,0 +1,11 @@
+langchain
+langchain-openai
+langgraph
+chromadb
+sentence-transformers
+pypdf
+python-dotenv
+streamlit
+openai
+requests
+requests-mock
