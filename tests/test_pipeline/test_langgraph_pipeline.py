@@ -80,7 +80,7 @@ class TestAIAgentPipeline:
     @pytest.mark.parametrize("query,expected_intent", [
         ("What's the weather in London?", "weather"),
         ("Tell me about the documents", "document"),
-        ("Explain AI", "document"),  # Default is document
+        ("Explain AI", "document"),
         ("How humid is it in Paris?", "weather"),
         ("What does this PDF say?", "document")
     ])
@@ -95,17 +95,14 @@ class TestAIAgentPipeline:
         """Test routing based on intent."""
         pipeline = AIAgentPipeline()
         
-        # Test weather routing
         state = {"intent": "weather"}
         route = pipeline._route_based_on_intent(state)
         assert route == "weather"
         
-        # Test document routing
         state = {"intent": "document"}
         route = pipeline._route_based_on_intent(state)
         assert route == "document"
         
-        # Test general routing
         state = {"intent": "general"}
         route = pipeline._route_based_on_intent(state)
         assert route == "general"
@@ -138,7 +135,6 @@ class TestAIAgentPipeline:
         
     def test_generate_weather_response(self, mock_config, mock_llm, mock_weather_service):
         """Test weather response generation."""
-        # Setup mock LLM response
         mock_llm.return_value.content = "Weather in London: 15°C, cloudy"
         
         pipeline = AIAgentPipeline()
@@ -161,12 +157,10 @@ class TestAIAgentPipeline:
         response = pipeline._generate_weather_response(state)
         assert "Weather in London" in response
     
-# Update the test_process_query_weather method
     def test_process_query_weather(self, mock_config, mock_llm, mock_weather_service):
         """Test complete query processing for weather."""
         pipeline = AIAgentPipeline()
         
-        # Instead of mocking the graph, we'll test the actual flow
         mock_weather_service.get_weather_data.return_value = {
             'status': 'success',
             'city': 'London',
@@ -182,7 +176,6 @@ class TestAIAgentPipeline:
         assert result["intent"] == "weather"
         assert "London" in result["response"]
 
-    # Similarly update test_process_query_document
     def test_process_query_document(self, mock_config, mock_llm, mock_vector_service):
         """Test complete query processing for documents."""
         pipeline = AIAgentPipeline()
@@ -201,14 +194,11 @@ class TestAIAgentPipeline:
         assert "AI" in result["response"]
         assert len(result["retrieved_docs"]) == 1
 
-    # Update test_process_query_error_handling
     def test_process_query_error_handling(self, mock_config, mock_llm):
         """Test error handling in query processing."""
         pipeline = AIAgentPipeline()
         
-        # Force an error in the weather service
         with patch.object(pipeline.weather_service, 'get_weather_data', side_effect=Exception("Test error")):
-            # Use a weather query to trigger the weather service
             result = pipeline.process_query("What's the weather in London?")
             
             assert result["success"] is False

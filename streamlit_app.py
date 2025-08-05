@@ -6,7 +6,6 @@ from src.services.pdf_service import PDFService
 from src.services.vector_service import VectorService
 from src.config import Config
 
-# Page configuration
 st.set_page_config(
     page_title="AI Agent Pipeline Demo",
     page_icon="🤖",
@@ -19,7 +18,7 @@ def check_service_availability():
         "openai": bool(Config.OPENAI_API_KEY),
         "weather": bool(Config.OPENWEATHERMAP_API_KEY),
         "langsmith": bool(Config.LANGCHAIN_API_KEY),
-        "documents": True  # Always available (local ChromaDB)
+        "documents": True 
     }
 
 # Initialize session state
@@ -38,12 +37,10 @@ def initialize_pipeline():
         if st.session_state.pipeline is None:
             with st.spinner("Initializing AI Pipeline..."):
                 try:
-                    # First ensure vector database is ready
                     vector_service = VectorService()
                     if vector_service.collection.count() == 0:
                         st.info("Vector database is empty. Please upload documents first.")
                     
-                    # Then initialize pipeline
                     st.session_state.pipeline = AIAgentPipeline()
                     st.session_state.pipeline_error = None
                     return True
@@ -66,7 +63,6 @@ def load_pdf_documents(uploaded_files):
         pdf_service = PDFService()
         vector_service = VectorService()
         
-        # Ensure collection exists
         if not hasattr(vector_service, 'collection'):
             st.error("Vector database not properly initialized")
             return 0
@@ -106,10 +102,8 @@ def main():
     st.title("🤖 AI Agent Pipeline Demo")
     st.markdown("**LangChain + LangGraph + LangSmith Integration**")
     
-    # Check available services
     available_services = check_service_availability()
     
-    # Show warning banner if services are missing
     if not all(available_services.values()):
         missing_services = []
         if not available_services["openai"]:
@@ -124,32 +118,29 @@ def main():
             "Please check your .env file or environment variables."
         )
     
-    # Sidebar for configuration and document upload
     with st.sidebar:
         st.header("⚙️ Configuration")
         
-        # Service status with explanations
         st.subheader("Service Status")
         
-        # OpenAI
         if available_services["openai"]:
-            st.success("✅ OpenAI - Available")
+            st.success("OpenAI - Available")
         else:
-            st.error("❌ OpenAI - Required for all features")
+            st.error("OpenAI - Required for all features")
         
         # Weather
         if available_services["weather"]:
-            st.success("✅ Weather - Available")
+            st.success("Weather - Available")
         else:
-            st.warning("⚠️ Weather - Disabled (missing OPENWEATHERMAP_API_KEY)")
+            st.warning("Weather - Disabled (missing OPENWEATHERMAP_API_KEY)")
         
         # LangSmith
         if available_services["langsmith"]:
-            st.success("✅ LangSmith - Available")
+            st.success("LangSmith - Available")
         else:
-            st.warning("⚠️ LangSmith - Disabled (missing LANGCHAIN_API_KEY)")
+            st.warning("LangSmith - Disabled (missing LANGCHAIN_API_KEY)")
         
-        st.success("✅ Document Processing - Always Available")
+        st.success("Document Processing - Always Available")
         
         st.divider()
         
@@ -167,27 +158,27 @@ def main():
                 with st.spinner("Processing PDF documents..."):
                     num_chunks = load_pdf_documents(uploaded_files)
                     if num_chunks > 0:
-                        st.success(f"✅ Loaded {num_chunks} document chunks!")
+                        st.success(f"Loaded {num_chunks} document chunks!")
                     else:
-                        st.error("❌ Failed to load documents")
+                        st.error("Failed to load documents")
         
         # Vector database info
         if st.session_state.documents_loaded:
-            st.success("📚 Documents are loaded and ready!")
+            st.success("Documents are loaded and ready!")
         
         st.divider()
         
         # Pipeline status
         st.subheader("🔧 Pipeline Status")
         if st.session_state.pipeline:
-            st.success("✅ Pipeline initialized")
+            st.success("Pipeline initialized")
         elif st.session_state.pipeline_error:
-            st.error(f"⚠️ Pipeline error: {st.session_state.pipeline_error}")
+            st.error(f"Pipeline error: {st.session_state.pipeline_error}")
         else:
-            st.warning("⚠️ Pipeline not initialized")
+            st.warning("Pipeline not initialized")
     
     # Main chat interface
-    st.header("💬 Chat Interface")
+    st.header(" Chat Interface")
     
     # Initialize pipeline
     if not initialize_pipeline():
@@ -214,10 +205,8 @@ def main():
         
         st.markdown("\n".join(example_queries))
     
-    # Chat history display
-    st.subheader("📝 Chat History")
+    st.subheader("Chat History")
     
-    # Display chat history
     for i, (query, response, metadata) in enumerate(st.session_state.chat_history):
         with st.container():
             st.markdown(f"**You:** {query}")
@@ -228,7 +217,6 @@ def main():
             
             st.divider()
     
-    # Chat input
     with st.form("chat_form", clear_on_submit=True):
         query_placeholder = "Enter your question here... ("
         if available_services["weather"]:
@@ -253,7 +241,6 @@ def main():
             st.session_state.chat_history = []
             st.rerun()
     
-    # Process query
     if submit_button and query.strip():
         if st.session_state.pipeline is None:
             st.error("Pipeline is not available. Please check your configuration.")
@@ -261,10 +248,8 @@ def main():
         
         with st.spinner("Processing your query..."):
             try:
-                # Process query through pipeline
                 result = st.session_state.pipeline.process_query(query)
                 
-                # Add to chat history
                 st.session_state.chat_history.append((
                     query,
                     result["response"],
@@ -277,7 +262,6 @@ def main():
                     }
                 ))
                 
-                # Rerun to update display
                 st.rerun()
             except Exception as e:
                 st.error(f"Error processing query: {str(e)}")
@@ -290,8 +274,6 @@ def main():
                     }
                 ))
                 st.rerun()
-    
-    # Footer
     st.markdown("---")
     st.markdown(
         "Built with ❤️ using LangChain, LangGraph, LangSmith, ChromaDB, and Streamlit"
@@ -301,13 +283,11 @@ if __name__ == "__main__":
     def check_system_ready():
         """Check if all required systems are ready."""
         try:
-            # Check vector database
             vector_service = VectorService()
             if not hasattr(vector_service, 'collection'):
                 st.error("Vector database not initialized. Please upload documents first.")
                 return False
             
-            # Check OpenAI
             if not Config.OPENAI_API_KEY:
                 st.error("OpenAI API key is required")
                 return False

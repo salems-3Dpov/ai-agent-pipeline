@@ -24,27 +24,22 @@ class AIAgentPipeline:
     
     def __init__(self):
         try:
-            # Validate configuration with required services
             Config.validate_config(required_services=["openai"])
             
-            # Initialize services that are available
             self.llm = ChatOpenAI(
                 model=Config.LLM_MODEL,
                 temperature=0.1,
                 api_key=Config.OPENAI_API_KEY
             )
             
-            # Initialize weather service only if API key is available
             if Config.OPENWEATHERMAP_API_KEY:
                 self.weather_service = WeatherService()
             else:
                 self.weather_service = None
-                print("⚠️ Weather service disabled - OPENWEATHERMAP_API_KEY not set")
+                print("Weather service disabled - OPENWEATHERMAP_API_KEY not set")
             
-            # Always initialize vector service (uses local ChromaDB)
             self.vector_service = VectorService()
             
-            # Build the graph
             self.graph = self._build_graph()
             
         except Exception as e:
@@ -54,19 +49,15 @@ class AIAgentPipeline:
     def _build_graph(self) -> StateGraph:
         """Build the LangGraph workflow."""
         
-        # Create the state graph
         workflow = StateGraph(dict)
         
-        # Add nodes
         workflow.add_node("classify_intent", self._classify_intent_node)
         workflow.add_node("fetch_weather", self._fetch_weather_node)
         workflow.add_node("retrieve_documents", self._retrieve_documents_node)
         workflow.add_node("generate_response", self._generate_response_node)
         
-        # Define the workflow
         workflow.set_entry_point("classify_intent")
         
-        # Add conditional edges based on intent classification
         workflow.add_conditional_edges(
             "classify_intent",
             self._route_based_on_intent,
@@ -77,7 +68,6 @@ class AIAgentPipeline:
             }
         )
         
-        # Both weather and document nodes lead to response generation
         workflow.add_edge("fetch_weather", "generate_response")
         workflow.add_edge("retrieve_documents", "generate_response")
         workflow.add_edge("generate_response", END)
@@ -89,26 +79,21 @@ class AIAgentPipeline:
         
         query = state.get("query", "").lower()
         
-        # Weather keywords
         weather_keywords = [
             "weather", "temperature", "rain", "sunny", "cloudy", "humidity",
             "humid", "forecast", "climate", "cold", "hot", "wind", "snow", "storm"
         ]
         
-        # Document/PDF keywords
         document_keywords = [
             "document", "pdf", "file", "paper", "report", "article",
             "research", "study", "analysis", "content", "text"
         ]
         
-        # Check for weather intent
         if any(keyword in query for keyword in weather_keywords):
             state["intent"] = "weather"
-        # Check for document intent
         elif any(keyword in query for keyword in document_keywords):
             state["intent"] = "document"
         else:
-            # Default to document search for most queries
             state["intent"] = "document"
         
         print(f"Classified intent: {state['intent']} for query: {query}")
@@ -123,21 +108,17 @@ class AIAgentPipeline:
         
         query = state["query"]
         
-        # Extract city name from query using simple regex
         city_match = re.search(r'weather.*?(?:in|for|of)\s+([a-zA-Z\s]+)', query, re.IGNORECASE)
         if not city_match:
-            # Try alternative patterns
             city_match = re.search(r'([a-zA-Z\s]+)\s+weather', query, re.IGNORECASE)
         
         if city_match:
             city = city_match.group(1).strip()
         else:
-            # Default city if no city found
             city = "London"
         
         print(f"Fetching weather for city: {city}")
         
-        # Fetch weather data
         weather_data = self.weather_service.get_weather_data(city)
         state["weather_data"] = weather_data
         
@@ -150,7 +131,6 @@ class AIAgentPipeline:
         
         print(f"Retrieving documents for query: {query}")
         
-        # Perform similarity search
         retrieved_docs = self.vector_service.similarity_search(query, n_results=3)
         state["retrieved_docs"] = retrieved_docs
         
@@ -187,10 +167,8 @@ class AIAgentPipeline:
         if weather_data.get("status") == "error":
             return f"I couldn't fetch the weather data: {weather_data.get('error', 'Unknown error')}"
         
-        # Format weather data
         formatted_weather = self.weather_service.format_weather_response(weather_data)
         
-        # Use LLM to generate a more conversational response
         system_message = SystemMessage(content="""
         You are a helpful weather assistant. Based on the weather data provided, 
         give a conversational and informative response about the current weather conditions.
@@ -215,13 +193,11 @@ class AIAgentPipeline:
         if not retrieved_docs:
             return "I couldn't find any relevant information in the documents to answer your question."
         
-        # Prepare context from retrieved documents
         context = "\n\n".join([
             f"Document {i+1}:\n{doc['content']}"
             for i, doc in enumerate(retrieved_docs)
         ])
         
-        # Use LLM to generate response based on retrieved context
         system_message = SystemMessage(content="""
         You are a helpful assistant that answers questions based on provided document context.
         Use only the information from the given context to answer questions.
@@ -264,7 +240,6 @@ class AIAgentPipeline:
             Dict[str, Any]: Pipeline result with response and metadata
         """
         
-        # Initialize state
         initial_state = {
             "query": query,
             "intent": "",
@@ -275,10 +250,8 @@ class AIAgentPipeline:
         }
         
         try:
-            # Run the graph
             result = self.graph.invoke(initial_state)
             
-            # Check if there was an error in any node
             if result.get("error"):
                 return {
                     "success": False,
