@@ -131,18 +131,24 @@ streamlit run streamlit_app.py
 ai-agent-pipeline/
 ├── src/
 │   ├── pipeline/
-│   │   └── langgraph_pipeline.py    # Main pipeline logic
+│   │   └── langgraph_pipeline.py
 │   ├── services/
-│   │   ├── pdf_service.py           # PDF processing
-│   │   ├── vector_service.py        # Vector database operations
-│   │   └── weather_service.py       # Weather API integration
-│   ├── models/
-│   │   └── schemas.py               # Data models and schemas
-│   └── config.py                    # Configuration management
-├── main.py                          # Command-line interface
-├── streamlit_app.py                 # Web interface
-├── requirements.txt                 # Python dependencies
-└── README.md                        # This file
+│   │   ├── pdf_service.py
+│   │   ├── vector_service.py
+│   │   └── weather_service.py
+│   └── config.py
+├── tests/
+│   ├── test_pipeline/
+│   │   └── test_langgraph_pipeline.py
+│   ├── test_services/
+│   │   ├── test_pdf_service.py
+│   │   ├── test_vector_service.py
+│   │   └── test_weather_service.py
+│   └── conftest.py
+├── main.py
+├── streamlit_app.py
+├── setup.py
+└── README.md
 ```
 
 ## 🔧 Core Components
