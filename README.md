@@ -14,7 +14,7 @@ A sophisticated AI agent system built with LangGraph that combines document retr
 
 ## 📋 Prerequisites
 
-- Python 3.11+
+- Python 3.8+
 - OpenAI API key
 - Weather API key (OpenWeatherMap)
 - Git
