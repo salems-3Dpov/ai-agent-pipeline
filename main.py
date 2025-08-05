@@ -5,7 +5,6 @@ import subprocess
 from pathlib import Path
 from typing import List, Optional, Dict, Any
 
-# Add src to path
 sys.path.append(str(Path(__file__).parent / "./src"))
 
 from src.pipeline.langgraph_pipeline import AIAgentPipeline
@@ -90,9 +89,9 @@ def interactive_mode() -> None:
     """Run the pipeline in interactive chat mode."""
     CLIDisplay.print_header("AI Agent Pipeline - Interactive Mode")
     print("Available query types:")
-    print("- 🌤️  Weather: 'What's the weather in Paris?'")
-    print("- 📄 Documents: 'What does the document say about AI?'")
-    print("- 💬 General: 'Explain quantum computing'")
+    print("-Weather: 'What's the weather in Paris?'")
+    print("-Documents: 'What does the document say about AI?'")
+    print("-General: 'Explain quantum computing'")
     print("\nType 'quit', 'exit', or 'q' to end session")
     print("=" * 50)
     

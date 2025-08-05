@@ -16,7 +16,6 @@ class WeatherService:
     def get_weather_data(self, city: str, country: Optional[str] = None) -> Dict:
         """Fetch weather data for a given city."""
         try:
-            # Construct the query parameter
             query = city
             if country:
                 query += f",{country}"
@@ -24,7 +23,7 @@ class WeatherService:
             params = {
                 'q': query,
                 'appid': self.api_key,
-                'units': 'metric'  # Use Celsius
+                'units': 'metric'
             }
             
             response = requests.get(self.base_url, params=params, timeout=10)
@@ -32,7 +31,6 @@ class WeatherService:
             
             data = response.json()
             
-            # Validate required fields
             if not all(key in data for key in ['name', 'sys', 'main', 'weather']):
                 return {
                     'status': 'error',
@@ -45,7 +43,6 @@ class WeatherService:
                     'error': "Unexpected API response format: invalid weather data"
                 }
             
-            # Extract relevant weather information
             weather_info = {
                 'status': 'success',
                 'city': data['name'],
@@ -78,7 +75,6 @@ class WeatherService:
         if weather_data['status'] == 'error':
             return f"Error fetching weather data: {weather_data['error']}"
         
-        # Build response with fallbacks for missing fields
         response_lines = [
             f"Weather Information for {weather_data['city']}, {weather_data['country']}:",
             f"🌡️ Temperature: {weather_data['temperature']}°C"

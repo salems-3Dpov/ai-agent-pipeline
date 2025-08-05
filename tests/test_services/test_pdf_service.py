@@ -31,7 +31,7 @@ class TestPDFService:
     
     def test_split_text_into_chunks(self, pdf_service):
         """Test text splitting into chunks."""
-        long_text = " ".join(["word"] * 1000)  # Create long text
+        long_text = " ".join(["word"] * 1000)
         chunks = pdf_service.split_text_into_chunks(long_text, {"source": "test.pdf"})
         assert len(chunks) > 1
         assert all(isinstance(chunk, Document) for chunk in chunks)

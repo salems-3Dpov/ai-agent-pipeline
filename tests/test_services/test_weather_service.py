@@ -9,7 +9,6 @@ class TestWeatherService:
     
     @pytest.fixture
     def weather_service(self):
-        # Ensure we have a mock API key for testing
         with patch('src.config.Config.OPENWEATHERMAP_API_KEY', 'test_api_key'):
             return WeatherService()
     
@@ -61,7 +60,6 @@ class TestWeatherService:
 
             result = weather_service.get_weather_data("London")
             
-            # The service should return error status for malformed responses
             assert result["status"] == "error"
             assert "Unexpected API response format" in result["error"]
 
@@ -131,12 +129,10 @@ class TestWeatherService:
             "temperature": 18,
             "description": "cloudy",
             "humidity": 65
-            # Missing feels_like, pressure, wind_speed, visibility
         }
         
         formatted = weather_service.format_weather_response(weather_data)
         
-        # Should still work with missing optional fields
         assert "Berlin, DE" in formatted
         assert "18°C" in formatted
         assert "Cloudy" in formatted

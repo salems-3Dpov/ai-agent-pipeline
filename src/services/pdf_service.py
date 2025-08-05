@@ -7,7 +7,6 @@ import logging
 from pathlib import Path
 import hashlib
 
-# Configure logging
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
@@ -33,7 +32,6 @@ class PDFService:
         self.chunk_overlap = chunk_overlap
         self.max_pages = max_pages
         
-        # Initialize text splitter with keep_separator for better chunking
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=self.chunk_size,
             chunk_overlap=self.chunk_overlap,
@@ -56,24 +54,20 @@ class PDFService:
             ValueError: For invalid files or extraction failures
         """
         try:
-            # Validate file existence
             if not os.path.exists(pdf_path):
                 raise FileNotFoundError(f"PDF file not found: {pdf_path}")
                 
-            # Validate file size
             file_size = os.path.getsize(pdf_path)
-            if file_size > 50 * 1024 * 1024:  # 50MB limit
+            if file_size > 50 * 1024 * 1024:
                 raise ValueError(f"PDF file too large ({(file_size/1024/1024):.2f}MB > 50MB limit)")
                 
             text = ""
             with open(pdf_path, 'rb') as file:
                 reader = PdfReader(file)
                 
-                # Check page count
                 if len(reader.pages) > self.max_pages:
                     raise ValueError(f"PDF has too many pages ({len(reader.pages)} > {self.max_pages} limit)")
                 
-                # Extract text from each page
                 for i, page in enumerate(reader.pages):
                     try:
                         page_text = page.extract_text()
@@ -108,18 +102,14 @@ class PDFService:
             return []
             
         try:
-            # Prepare metadata
             base_metadata = metadata.copy() if metadata else {}
             base_metadata['total_chars'] = len(text)
             
-            # Generate document hash for tracking
             doc_hash = hashlib.md5(text.encode()).hexdigest()[:8]
             base_metadata['doc_hash'] = doc_hash
             
-            # Split text
             chunks = self.text_splitter.split_text(text)
             
-            # Create documents with chunk metadata
             documents = []
             for i, chunk in enumerate(chunks):
                 chunk_metadata = base_metadata.copy()
@@ -155,10 +145,8 @@ class PDFService:
             ValueError: For processing failures
         """
         try:
-            # Extract text
             text = self.extract_text_from_pdf(pdf_path)
             
-            # Prepare metadata
             metadata = {
                 'source': pdf_path,
                 'filename': os.path.basename(pdf_path),
@@ -169,7 +157,6 @@ class PDFService:
             if additional_metadata:
                 metadata.update(additional_metadata)
             
-            # Split into chunks
             return self.split_text_into_chunks(text, metadata)
             
         except Exception as e:
